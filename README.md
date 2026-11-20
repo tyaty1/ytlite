@@ -136,3 +136,13 @@ Build: `.\gradlew.bat -Pgeckotest :geckotest:assembleDebug` (add `-Pgeckoabi=x86
 - `DevProxy.cs` is a localhost HTTP proxy for emulators on networks that block their DNS:
   `dotnet run android\tools\DevProxy.cs`, then
   `adb shell settings put global http_proxy 10.0.2.2:8888`.
+
+# License
+YTLite's own code is under the MIT License (`LICENSE`).
+
+Bundled third-party parts keep their own licenses:
+- **uBlock Origin Lite** (`YTLite/extensions/ubol/`): GPL-3.0, see `YTLite/extensions/ubol/LICENSE.txt`.
+  Its filter lists come from their own projects under their own licenses.
+- **NuGet and Maven packages** (WebView2 SDK, Magick.NET, AndroidX WebKit, GeckoView) are
+  downloaded at build time under their own licenses.
+  GeckoView is MPL-2.0 and is only used by the `geckotest` experiment.
