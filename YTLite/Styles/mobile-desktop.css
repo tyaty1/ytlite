@@ -1,0 +1,146 @@
+/* YTLite: desktop layout for m.youtube.com
+   Targets full / half / quarter windows on 1080p–2160p, 16:9, 16:10 and ultrawide monitors
+   (content areas from ~960x470 to ~5120x2060 CSS px). Everything is computed from the viewport,
+   so there are no per-monitor breakpoints. Injected by DesktopStyle.cs; edit and open a new tab. */
+
+:root {
+  --yl-top: 48px;                                   /* YouTube's top bar */
+  --yl-rail: 72px;                                  /* left navigation rail */
+  --yl-gap: clamp(12px, 1.2vw, 32px);
+  --yl-sb: 15px;                                    /* classic scrollbar width (100vw includes it) */
+  --yl-card: clamp(260px, 15vw, 500px);             /* minimum card width in feeds */
+  --yl-page: 4200px;                                /* feeds never get wider than this */
+
+  /* watch page (landscape) */
+  --yl-rel: clamp(280px, 24vw, 480px);              /* related-videos column */
+  --yl-peek: clamp(56px, 10vh, 140px);              /* keep the title visible under the player */
+  --yl-pw: min(calc(100vw - var(--yl-sb) - var(--yl-rel) - 3 * var(--yl-gap)),
+               calc((100vh - var(--yl-top) - 2 * var(--yl-gap) - var(--yl-peek)) * 16 / 9));
+  --yl-ph: calc(var(--yl-pw) * 9 / 16);
+  --yl-left: max(var(--yl-gap), calc((100vw - var(--yl-sb) - var(--yl-pw) - var(--yl-gap) - var(--yl-rel)) / 2));
+}
+
+@media (min-width: 900px) {
+
+  /* ---------- navigation: bottom tab bar -> left rail ---------- */
+  ytm-app:has(> ytm-pivot-bar-renderer) { padding-bottom: 0 !important; padding-left: var(--yl-rail) !important; }
+  ytm-pivot-bar-renderer {
+    top: var(--yl-top) !important; bottom: 0 !important; left: 0 !important; right: auto !important;
+    width: var(--yl-rail) !important; height: auto !important;
+    flex-direction: column !important; justify-content: flex-start !important;
+    padding-top: 8px !important; border-top: 0 !important; box-shadow: none !important;
+    /* keep YouTube's own (theme-aware) background so dark mode still works */
+  }
+  ytm-pivot-bar-item-renderer { flex: 0 0 74px !important; width: var(--yl-rail) !important; height: 74px !important; }
+
+  /* ---------- top bar: centered search like desktop ---------- */
+  .mobile-topbar-header-content .search-bar,
+  yt-searchbox.ytSearchboxComponentMweb { max-width: 720px !important; margin: 0 auto !important; flex: 1 1 auto; }
+
+  /* ---------- feeds: page width ---------- */
+  ytm-search, ytm-browse {
+    max-width: var(--yl-page) !important; width: auto !important;
+    margin: 0 auto !important; padding: 0 var(--yl-gap) !important; box-sizing: border-box;
+  }
+
+  /* ---------- feeds: card grids (search results, home, channel, subscriptions) ---------- */
+  ytm-search ytm-item-section-renderer > lazy-list,
+  .rich-grid-renderer-contents {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(var(--yl-card), 1fr));
+    gap: 4px var(--yl-gap);
+    padding-top: 12px; align-items: start;
+  }
+  /* channels, shelves, banners etc. span the full row */
+  ytm-search ytm-item-section-renderer > lazy-list > :not(ytm-video-with-context-renderer):not(ytm-compact-playlist-renderer):not(ytm-compact-video-renderer):not(ytm-compact-radio-renderer),
+  .rich-grid-renderer-contents > :not(ytm-rich-item-renderer) { grid-column: 1 / -1; }
+  .rich-grid-renderer-contents > ytm-rich-item-renderer { width: auto !important; margin: 0 !important; display: block !important; }
+
+  /* big cards (search, home) */
+  ytm-search ytm-media-item,
+  .rich-grid-renderer-contents ytm-media-item {
+    display: flex !important; flex-direction: column !important;
+    margin: 0 0 20px !important; padding: 0 !important; width: auto !important;
+  }
+  ytm-search ytm-media-item .media-item-thumbnail-container,
+  .rich-grid-renderer-contents ytm-media-item .media-item-thumbnail-container { width: 100% !important; }
+  ytm-search ytm-media-item ytm-thumbnail-cover,
+  .rich-grid-renderer-contents ytm-media-item ytm-thumbnail-cover {
+    width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden;
+  }
+  ytm-search ytm-media-item .media-item-details,
+  .rich-grid-renderer-contents ytm-media-item .media-item-details {
+    flex-direction: row !important; align-items: flex-start; gap: 12px; margin: 12px 0 0 !important; width: auto !important;
+  }
+  ytm-search ytm-media-item .media-channel,
+  .rich-grid-renderer-contents ytm-media-item .media-channel { order: 0 !important; flex: 0 0 36px; width: 36px; flex-direction: column !important; }
+  ytm-search ytm-media-item .media-channel ytm-profile-icon,
+  .rich-grid-renderer-contents ytm-media-item .media-channel ytm-profile-icon { width: 36px !important; height: 36px !important; }
+  ytm-search ytm-media-item .media-item-info,
+  .rich-grid-renderer-contents ytm-media-item .media-item-info { order: 1 !important; flex: 1 1 auto; min-width: 0; }
+  ytm-search .media-item-headline,
+  .rich-grid-renderer-contents .media-item-headline { font-size: 1.6rem !important; line-height: 2.2rem !important; font-weight: 500 !important; }
+
+  /* compact items (channel "Videos" tab) -> cards */
+  .rich-grid-renderer-contents .YtmCompactMediaItemHost { flex-direction: column !important; width: auto !important; margin-bottom: 20px; }
+  .rich-grid-renderer-contents .YtmCompactMediaItemImage { width: 100% !important; margin: 0 !important; }
+  .rich-grid-renderer-contents ytm-compact-thumbnail {
+    width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden;
+  }
+  .rich-grid-renderer-contents .YtmCompactMediaItemMetadata { width: auto !important; margin: 10px 0 0 !important; padding: 0 !important; }
+  .rich-grid-renderer-contents .YtmCompactMediaItemHeadline { font-size: 1.6rem !important; line-height: 2.2rem !important; font-weight: 500 !important; }
+}
+
+/* ---------- watch page, landscape windows: player sized to fit, related column beside it ---------- */
+@media (orientation: landscape) and (min-width: 900px) {
+  body:has(.watch-below-the-player) ytm-watch { width: auto !important; max-width: none !important; }
+
+  body:has(.watch-below-the-player) #player-container-id {
+    left: var(--yl-left) !important; right: auto !important;
+    top: calc(var(--yl-top) + var(--yl-gap)) !important;
+    width: var(--yl-pw) !important; max-width: none !important;
+    border-radius: 12px; overflow: hidden;
+  }
+  body:has(.watch-below-the-player) .player-size.player-placeholder {
+    width: var(--yl-pw) !important; height: var(--yl-ph) !important; padding: 0 !important;
+    margin: var(--yl-gap) 0 0 var(--yl-left) !important;
+  }
+  body:has(.watch-below-the-player) .watch-below-the-player {
+    width: var(--yl-pw) !important; max-width: none !important; margin-left: var(--yl-left) !important;
+  }
+  body:has(.watch-below-the-player) ytm-single-column-watch-next-results-renderer { width: auto !important; }
+
+  /* related videos: one column of thumbnail-left rows, like desktop */
+  body:has(.watch-below-the-player) .related-items-container {
+    position: fixed !important;
+    left: calc(var(--yl-left) + var(--yl-pw) + var(--yl-gap)) !important; right: auto !important;
+    top: calc(var(--yl-top) + var(--yl-gap)) !important; bottom: 0 !important;
+    width: var(--yl-rel) !important; overflow-y: auto !important; overflow-x: hidden !important;
+  }
+  .related-items-container ytm-item-section-renderer { width: auto !important; padding: 0 !important; }
+  .related-items-container ytm-video-with-context-renderer {
+    display: block !important; width: auto !important; margin: 0 0 10px !important; padding: 0 !important;
+  }
+  .related-items-container ytm-media-item {
+    display: flex !important; flex-direction: row !important; align-items: flex-start !important; gap: 10px;
+    width: auto !important; height: auto !important; margin: 0 !important; padding: 0 !important;
+  }
+  .related-items-container ytm-media-item .media-item-thumbnail-container {
+    flex: 0 0 44% !important; width: 44% !important; height: auto !important; aspect-ratio: 16 / 9;
+    padding: 0 !important; border-radius: 8px; overflow: hidden;
+  }
+  .related-items-container ytm-media-item .media-item-thumbnail-container > *,
+  .related-items-container ytm-media-item ytm-thumbnail-cover {
+    width: 100% !important; height: 100% !important; padding: 0 !important;
+  }
+  .related-items-container ytm-media-item .media-item-details { flex: 1 1 auto; min-width: 0; margin: 0 !important; width: auto !important; }
+  .related-items-container ytm-media-item .media-channel ytw-channel-thumbnail-with-link-renderer { display: none !important; }
+  .related-items-container .media-item-headline { font-size: 1.4rem !important; line-height: 2rem !important; font-weight: 500 !important; }
+  .related-items-container { container-type: inline-size; }
+}
+
+/* narrow related column (quarter windows): stacked cards instead of cramped rows */
+@container (max-width: 340px) {
+  .related-items-container ytm-media-item { flex-direction: column !important; gap: 8px; }
+  .related-items-container ytm-media-item .media-item-thumbnail-container { flex: none !important; width: 100% !important; }
+}

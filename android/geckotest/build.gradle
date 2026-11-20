@@ -1,0 +1,35 @@
+// Experiment: can GeckoView Lite 118 (the newest Gecko that still supports Android 4.x) play YouTube
+// on Android 4.4? Test-only module, not part of the YTLite app.
+//   .\gradlew.bat -Pgeckotest :geckotest:assembleDebug                  (ARM, for real 4.4 phones)
+//   .\gradlew.bat -Pgeckotest -Pgeckoabi=x86 :geckotest:assembleDebug   (x86, for the emulator)
+plugins {
+    id 'com.android.application'
+}
+
+def geckoAbi = providers.gradleProperty('geckoabi').getOrElse('armeabi-v7a')
+
+android {
+    namespace 'app.ytlite.geckotest'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+
+    defaultConfig {
+        applicationId 'app.ytlite.geckotest'
+        minSdk 19
+        targetSdk 34
+        versionCode 2
+        versionName "0.2-${geckoAbi}"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lint { abortOnError false }
+}
+
+dependencies {
+    // Lite variant: minSdk 16 up to 118 (the "omni" variant already needed Android 5).
+    implementation "org.mozilla.geckoview:geckoview-${geckoAbi}:118.0.20231009140911"
+}

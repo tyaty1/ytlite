@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // GeckoView (Firefox's engine), only used by the :geckotest experiment.
+        maven { url 'https://maven.mozilla.org/maven2/' }
+    }
+}
+rootProject.name = "YTLite"
+include ':app'
+// GeckoView-on-Android-4.4 experiment (pulls a ~73 MB engine). Build it with:
+//   .\gradlew.bat -Pgeckotest :geckotest:assembleDebug
+if (providers.gradleProperty('geckotest').isPresent()) include ':geckotest'

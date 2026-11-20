@@ -1,0 +1,25 @@
+# .NET build output
+YTLite/bin/
+YTLite/obj/
+*.user
+.vs/
+
+# Published builds (attach these to a GitHub release instead)
+publish/
+publish-new/
+publish-android/
+*.apk
+
+# Android / Gradle
+android/.gradle/
+android/**/build/
+android/build/
+android/local.properties
+android/.idea/
+*.iml
+*.keystore
+*.jks
+
+# Test output
+layouttest*/
+selftest*.txt

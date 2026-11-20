@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <Product>YTLite</Product>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Regenerate with tools\make-icon.ps1 -->
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <!-- WebView2 package also references its WPF assembly; harmless for WinForms. -->
+    <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="app.ico" LogicalName="YTLite.app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Magick.NET-Q8-x64" Version="15.1.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4314.35" />
+  </ItemGroup>
+
+  <!-- Editable at runtime: ad-block rules/script, frame-grab script, bundled uBlock Origin Lite. -->
+  <ItemGroup>
+    <None Update="AdBlock\adblock.js" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="AdBlock\adblock-rules.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Screenshot\grab-frame.js" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Styles\mobile-desktop.css" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="extensions\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

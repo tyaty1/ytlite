@@ -1,0 +1,49 @@
+{
+  // Requests matching these WebView2 wildcard patterns get an empty 403 response.
+  "blockUrlPatterns": [
+    "*://*.doubleclick.net/*",
+    "*://*.googlesyndication.com/*",
+    "*://*.googleadservices.com/*",
+    "*://*.youtube.com/pagead/*",
+    "*://*.youtube.com/api/stats/ads*",
+    "*://*.youtube.com/ptracking*",
+    "*://*.youtube.com/get_midroll_*"
+  ],
+
+  // Dotted paths deleted from any parsed JSON / player response (also inside .playerResponse).
+  "prunePaths": [
+    "adPlacements",
+    "adSlots",
+    "playerAds",
+    "adBreakHeartbeatParams",
+    "auxiliaryUi.messageRenderers.enforcementMessageViewModel"
+  ],
+
+  // CSS selectors hidden on every YouTube page (one rule each, so a bad selector can't break the rest).
+  "hideSelectors": [
+    "#masthead-ad",
+    "#player-ads",
+    "ytd-ad-slot-renderer",
+    "ytd-in-feed-ad-layout-renderer",
+    "ytd-banner-promo-renderer",
+    "ytd-statement-banner-renderer",
+    "ytd-promoted-sparkles-web-renderer",
+    "ytd-promoted-video-renderer",
+    "ytd-display-ad-renderer",
+    "ytd-companion-slot-renderer",
+    "ytd-action-companion-ad-renderer",
+    "ytd-player-legacy-desktop-watch-ads-renderer",
+    "ytd-rich-item-renderer:has(ytd-ad-slot-renderer)",
+    "ytd-rich-section-renderer:has(ytd-statement-banner-renderer)",
+    "ytd-enforcement-message-view-model",
+    "tp-yt-paper-dialog:has(ytd-enforcement-message-view-model)",
+    ".ytp-ad-overlay-container",
+    ".ytp-ad-image-overlay",
+    ".ytp-ad-text-overlay",
+    "ad-slot-renderer",
+    "ytm-promoted-sparkles-web-renderer",
+    "ytm-promoted-video-renderer",
+    "ytm-companion-ad-renderer",
+    "ytm-rich-item-renderer:has(ad-slot-renderer)"
+  ]
+}

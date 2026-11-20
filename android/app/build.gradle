@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'app.ytlite'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+
+    defaultConfig {
+        applicationId 'app.ytlite'
+        minSdk 19          // Android 4.4 (its WebView is too old for current YouTube; the app warns)
+        targetSdk 34
+        versionCode 1
+        versionName '0.1'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // Sideloaded builds are signed with the debug key so they install directly.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // Web code shared with the Windows app: one copy of the ad-block script/rules and the desktop CSS.
+    sourceSets {
+        main {
+            assets.srcDirs += ['../../YTLite/AdBlock', '../../YTLite/Styles']
+        }
+    }
+
+    lint {
+        abortOnError false
+    }
+}
+
+dependencies {
+    // Document-start script injection on updatable WebViews (Android 5.0+). Last line with minSdk 19.
+    implementation 'androidx.webkit:webkit:1.11.0'
+}
