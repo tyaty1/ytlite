@@ -42,7 +42,7 @@ of 5. The video decoder (GPU process, about 300 MB at 4K) is the same either way
 
 ## Shortcuts
 Ctrl+T new tab · Ctrl+W close · Ctrl+Tab / Ctrl+Shift+Tab switch · Ctrl+L search ·
-Ctrl+Shift+S screenshot menu · F5 reload · Alt+←/→ back/forward · middle-click a tab to close it
+Ctrl+Shift+S screenshot menu · F5 reload · Alt+←/→ back/forward · middle-click a tab to close it · drag a tab to move it
 
 ## Screenshots (📷 Frame)
 The frame is taken at the video's native resolution, without player controls.
